@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Tasks</title>
+</head>
+<body>
+    {% comment %} <div>
+        <ul>
+            
+            {% for task in tasks %}
+                <li>{{ task.status}}</li>
+            {% endfor %}
+                
+        </ul>
+    </div> 
+    <div>
+        <h2>{{ task_3 }}</h2>
+    </div>
+<hr>
+<H1>we now will see the filter Data </H1>  
+<hr>
+<div>
+    <ul>
+        
+        {% for task in task_4 %}
+            <li>
+                <p>{{task.title}}</p>
+                <span>{{ task.status}}</span>
+            </li>
+        {% endfor %}
+            
+    </ul>
+</div>   
+<hr>
+<H1>we now will see the filter Data of due date of today </H1>  
+<hr>
+<div>
+    <ul>
+        
+        {% for task in tasks_5 %}
+            <li>
+                <p>{{task.title}}</p>
+                <span>{{ task.status}}</span>
+            </li>
+        {% endfor %}
+            
+    </ul>
+</div> 
+<hr>
+<H1>we now will see Except LOW priority Task</H1>  
+<hr>
+<div>
+    <ul>
+        
+        {% for task in tasks_6 %}
+            <li>
+                <p>{{task.task}}</p>
+                <span>{{ task.priority}}</span>
+            </li>
+        {% endfor %}
+            
+    </ul>
+</div>
+<hr>
+<H1>we now will see if there iis c in any title Task</H1>  
+<hr>
+<div>
+    <ul>
+        
+        {% for task in task_7 %}
+            <li>
+                <p>{{task.title}}</p>
+                <span>{{ task.status}}</span>
+            </li>
+        {% endfor %}
+            
+    </ul>
+</div>
+<hr>
+<H1>we now will see use related name title Task</H1>  
+<hr>
+<div>
+    <ul>
+        
+        {% for task in rel_tasks %}
+            <li>
+                <p>{{task.title}}</p>
+                <span>{{ task.details.priority}}</span>
+            </li>
+        {% endfor %}
+            
+    </ul>
+</div> {% endcomment %}
+<hr>
+<div>
+    <p>{{Task_count.num_task}}</p>
+</div>
+</body>
+</html>
