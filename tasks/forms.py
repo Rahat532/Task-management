@@ -38,10 +38,23 @@ class StyleFromMixin:
                 field.widget.attrs.update({
                     'class':"space-y-2"
                 })
+            elif isinstance(field.widget, forms.PasswordInput):
+                field.widget.attrs.update({
+                    'class': self.default_classes,
+                    'placeholder': f"Enter The password"
+                })
+            elif isinstance(field.widget, forms.EmailInput):
+                field.widget.attrs.update({
+                    'class': self.default_classes,
+                    'placeholder': f"Enter {field.label.lower()}"
+                })
             else:
                 field.widget.attrs.update({
                     'class': self.default_classes
                 })
+    def __init__(self,*arg,**kwargs):
+        super().__init__(*arg,**kwargs)
+        self.apply_style_widgets() 
         
 #  Django Models from
 class TasksModelForm(StyleFromMixin,forms.ModelForm):

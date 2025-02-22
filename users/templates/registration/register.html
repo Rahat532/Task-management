@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Authentication System</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-lg w-full bg-white shadow-lg rounded-2xl p-8">
+
+        <h1 class="text-3xl font-bold text-center text-blue-600 mb-8">Welcome to Authentication System</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-4 p-4 rounded-lg text-white {% if message.tags == 'success' %}bg-green-500{% elif message.tags == 'error' %}bg-red-500{% else %}bg-blue-500{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            <div class="mb-4 p-4 rounded-lg bg-red-500 text-white">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block mb-2 text-gray-700 font-medium">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <ul class="mt-2 text-sm text-red-600">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                Sign Up
+            </button>
+        </form>
+
+        {% comment %} <p class="mt-6 text-center text-gray-600">Already have an account? <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Log in</a></p> {% endcomment %}
+
+    </div>
+</body>
+
+</html>
