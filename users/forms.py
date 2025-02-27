@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django import forms
 import re
 from tasks.forms import StyleFromMixin
+from django.contrib.auth.forms import AuthenticationForm
 class RegisterForm(UserCreationForm):
     class Meta:
         model=User
@@ -57,3 +58,8 @@ class CustomRegistrationForm(StyleFromMixin,forms.ModelForm):
          if errors:
             raise forms.ValidationError(errors)
          return password1
+
+
+class LoginForm( StyleFromMixin,AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
