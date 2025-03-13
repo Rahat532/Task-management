@@ -7,7 +7,7 @@ from django.db.models import Q,Count,Max,Min,Avg
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required,user_passes_test,permission_required
 from django.contrib.auth import get_user_model
-
+from users.views import is_admin
 
 def get_user_with_groups(user_id):
     """Fetch the user and their groups in a single query."""
@@ -71,7 +71,7 @@ def test(request):
     }
     return render(request, 'test.html', context)
 @login_required
-@permission_required('tasks.add_task',login_url='no-permission')
+@permission_required('tasks.add_tasks',login_url='no-permission')
 def create_task(request):
     #employees= Employee.objects.all()
    task_form= TasksModelForm()# for Get Methods
@@ -79,7 +79,7 @@ def create_task(request):
     
    if request.method =="POST":
         task_form= TasksModelForm(request.POST)# for Get Methods
-        task_detail_from=TaskDetailModelFrom(request.POST)
+        task_detail_from=TaskDetailModelFrom(request.POST,request.FILES)
         
         if task_form.is_valid() and task_detail_from.is_valid() :
             '''For Model From Data'''
@@ -96,7 +96,7 @@ def create_task(request):
    context={"task_form": task_form,"task_detail_from": task_detail_from,}
    return render(request, 'task_from.html',context)
 @login_required
-@permission_required('tasks.change_task',login_url='no-permission')
+@permission_required('tasks.change_tasks',login_url='no-permission')
 def update_task(request,id):
     
    task=Tasks.objects.get(id=id)
@@ -124,7 +124,7 @@ def update_task(request,id):
    return render(request, 'task_from.html',context)
 
 @login_required
-@permission_required('tasks.delete_task',login_url='no-permission')
+@permission_required('tasks.delete_tasks',login_url='no-permission')
 def delete_task(request,id):
     if request.method == 'POST':
         task = Tasks.objects.get(id=id)
@@ -136,7 +136,7 @@ def delete_task(request,id):
         return redirect('Manager-Dashboard')
 
 @login_required
-@permission_required('tasks.view_task',login_url='no-permission')
+@permission_required('tasks.view_tasks',login_url='no-permission')
 def view_task(request):
     # retrieve all Data from Tasks Model
     tasks=Tasks.objects.all()
@@ -162,4 +162,28 @@ def view_task(request):
     # how many tasks in on the project
     task_9=Project.objects.annotate(num_task=Count('project_name'))
     return render(request, 'show_task.html',{'tasks':tasks,"task_3":task_3, 'task_4':task_4,'tasks_5':tasks_5,'tasks_6':tasks_6,'task_7':task_7,'rel_tasks':rel_tasks,"Task_count":Task_count})
+
+@login_required
+@permission_required('tasks.view_tasks',login_url='no-permission')
+def task_detail(request,task_id):
+    task=Tasks.objects.get(id=task_id)
+    status_choices=Tasks.STATUS_CHOICES
+    
+    if request.method == 'POST':
+        select_status=request.POST.get("task_status")
+        task.status=select_status
+        task.save()
+        return redirect('task-details',task.id)
+    return render(request, 'task_detail.html',{'task':task,'status_choices': status_choices})
+
+@login_required
+def dashboard(request):
+    if is_manager(request.user):
+        return redirect('Manager-Dashboard')
+    elif is_employee(request.user):
+        return redirect('user-dashboard')
+    elif is_admin(request.user):
+        return redirect('admin-dashboard')
+   
+    return redirect('no-permission')
     

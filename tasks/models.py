@@ -1,14 +1,5 @@
 from django.db import models
-
-
-
-# class Employee
-class Employee(models.Model):
-    name=models.CharField(max_length=100)
-    email=models.EmailField(unique=True)
-    
-    def __str__(self):
-        return self.name
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Project(models.Model):
@@ -26,7 +17,8 @@ class Tasks(models.Model):
         ('COMPLETED','Completed'),
         
     ]
-    assigned_to=models.ManyToManyField(Employee,related_name='tasks')
+    # assigned_to=models.ManyToManyField(Employee,related_name='tasks')
+    assigned_to=models.ManyToManyField(User,related_name='tasks')
     project =models.ForeignKey(Project,on_delete=models.CASCADE,default=1,related_name='project_name')
     title=models.CharField(max_length=250)
     description=models.TextField()
@@ -56,6 +48,7 @@ class TaskDetail(models.Model):
     # assigned_to=models.CharField(max_length=100)
     priority=models.CharField(max_length=6, choices=PRIORITY_OPTIONS,default='LOW')
     notes=models.TextField(blank=True,null=True)
+    asset=models.ImageField(upload_to='tasks_asset',blank=True,null=True,default="tasks_asset\defim-1.avif")
     def __str__(self):
         return f"Details for Task{self.task.title}"
     
